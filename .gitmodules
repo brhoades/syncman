@@ -1,0 +1,3 @@
+[submodule "net-ssh"]
+	path = net-ssh
+	url = http://github.com/net-ssh/net-ssh.git
