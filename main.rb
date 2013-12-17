@@ -1,12 +1,12 @@
 require 'yaml'
-require_relative 'net-ssh'
+require 'net/ssh'
 
 cfg = YAML.load File.open "config.yml"
+sshc = cfg['ssh']
+print cfg, "\n\n"
 
 #Contact the server via SSH and get a file readout with ls
-print cfg
-
-Net::SSH.start cfg{'server'}, :password => cfg{'password'} do |ssh|
-  files = ssh.exec "ls " + cfg{'directory'}
-  print files
+Net::SSH.start( sshc['server'], sshc['username'], :password => [sshc['pass']], :port => sshc['port'] ) do |ssh|
+  #Name relative to directory\tsize in bytes\tunix timestamp\n
+  files = ssh.exec "cd " + sshc['directory'] + "&& find -type f -printf '%p\t%s\t%Ts\n'"
 end
