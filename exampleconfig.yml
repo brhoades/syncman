@@ -2,5 +2,6 @@ ssh:
   server:
   username:
   key:
+  password:
   directory:
   port: 22
