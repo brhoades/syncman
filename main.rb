@@ -1,5 +1,5 @@
 require 'yaml'
-require 'net/ssh'
+require_relative 'net-ssh'
 
 cfg = YAML.load File.open "config.yml"
 
