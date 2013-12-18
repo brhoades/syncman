@@ -5,3 +5,7 @@ ssh:
   password:
   directory:
   port: 22
+download:
+  time: 
+  baseurl: 
+  destination: 

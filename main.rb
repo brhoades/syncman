@@ -15,3 +15,9 @@ end
 
 #Take each line of the string recieved above and split it into an array of its values
 files = files.lines.map( &:chomp ).map { |l| l.split "\t" }
+
+files.each do |filex|
+  
+  
+  
+end  
