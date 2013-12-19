@@ -8,5 +8,7 @@ ssh:
 download:
   time: 
   baseurl: 
+  user: 
+  pass: 
   destination: 
   filter: 

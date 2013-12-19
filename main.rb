@@ -1,5 +1,7 @@
 require 'yaml'
 require 'net/ssh'
+require 'open-uri'
+require_relative 'func.rb'
 
 cfg = YAML.load File.open "config.yml"
 sshc = cfg['ssh']
@@ -8,16 +10,6 @@ $filters = cfg['download']['filter'].split ","
 files = ""
 folders = {} #Our folder indicies that point to our files
 delete = [] #Put things to delete in here as we go
-
-def filter( fn )
-  $filters.each do |filter|
-    if fn.match /#{filter}$/
-      return true
-    end
-  end
-  
-  return false
-end
 
 #Contact the server via SSH and get a file readout with ls
 Net::SSH.start( sshc['server'], sshc['username'], :password => [sshc['pass']], :port => sshc['port'] ) do |ssh|
@@ -74,16 +66,12 @@ folders.keys.each do |folder|
   end
 end
 
-#FIXME: backup reldirectory
 #Now move folders with one file to the main directory
 folders.keys.each do |folder|
-  if folder == ""
-    next
-  end
   
   if folders[folder].size == 0
     folders.remove folder
-  elsif folders[folder].size == 1
+  elsif folders[folder].size == 1 and folder != ""
     if not folders.has_key? ""
       folders[""] = []
     end
@@ -93,4 +81,28 @@ folders.keys.each do |folder|
   end
 end
 
-print folders
+#Download. Skip anything we have.
+folders.keys.each do |folder|
+  start = folder
+  folders[folder].each do |filex|
+    #FIXME: This will download twice if at the cusp of a month
+    if not File.exist? folderDate( downc['destination'] ) + filex[0]
+      # Create the directory recursively, substituting the date in
+      system "mkdir -p \"" + folderDate( downc['destination'] ) + "\""
+      if filex[2] != ""
+	filex[2] += "/"
+      end
+      print downc['baseurl'] + filex[2] + filex[0]
+      # Open an HTTP connection
+      File.open( folderDate( downc['destination'] ) + filex[0], "wb") do |file|
+	if downc['user'] != nil
+	  file.write open( downc['baseurl'] + filex[2] + filex[0], 
+	                   :http_basic_authentication => [downc['user'], downc['pass']],
+	                   :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE ).read
+	else
+	  file.write open( downc['baseurl'] + filex[2] + filex[0] ).read
+	end
+      end
+    end
+  end
+end
