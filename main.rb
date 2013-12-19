@@ -25,6 +25,11 @@ Net::SSH.start( sshc['server'], sshc['username'], :password => [sshc['pass']], :
 files = ssh.exec! "cd " + sshc['directory'] + "&& find -type f -newermt @#{Date.today.to_time.to_i - downc['time']*3600} -printf '%p\t%s\t%Ts\n'"
 end
 
+if files == nil
+  print "No files to download\n"
+  exit 0
+end
+
 #Take each line of the string recieved above and split it into an array of its values
 files = files.lines.map { |l| l.chomp.split "\t" }
 
@@ -46,7 +51,9 @@ files.each do |filex|
   end
   
   folder = folder.join '/'
-  data = [fn, size]
+  
+  #second fn is a backup for downloading
+  data = [fn, size, fn]
   if folder.size == 0
     folder = ""
   end
@@ -67,6 +74,7 @@ folders.keys.each do |folder|
   end
 end
 
+#FIXME: backup reldirectory
 #Now move folders with one file to the main directory
 folders.keys.each do |folder|
   if folder == ""
