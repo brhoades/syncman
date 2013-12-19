@@ -58,11 +58,8 @@ files.each do |filex|
   end  
 end  
 
-print folders.to_s + "\n\n"
-
 #Remove filtered files
 folders.keys.each do |folder|
-  print folder + "\n"
   folders[folder].each do |file|
     if filter file[0]
       folders[folder].delete file
@@ -72,6 +69,20 @@ end
 
 #Now move folders with one file to the main directory
 folders.keys.each do |folder|
+  if folder == ""
+    next
+  end
+  
+  if folders[folder].size == 0
+    folders.remove folder
+  elsif folders[folder].size == 1
+    if not folders.has_key? ""
+      folders[""] = []
+    end
+    
+    folders[""].push folders[folder][0]
+    folders.delete folder
+  end
 end
 
 print folders
