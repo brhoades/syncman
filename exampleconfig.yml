@@ -9,3 +9,4 @@ download:
   time: 
   baseurl: 
   destination: 
+  filter: 
