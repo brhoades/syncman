@@ -1,3 +1,5 @@
+require 'open-uri'
+
 # If a filter in our global filters list matches, we return true
 def filter( fn )
   $filters.each do |filter|
@@ -25,11 +27,11 @@ def download( filex, downc )
   # Open an HTTP connection
   File.open( folderDate( downc['destination'] ) + filex[0], "wb") do |file|
     if downc['user'] != nil
-      file.write open( downc['baseurl'] + filex[2] + filex[0], 
+      file.write open( URI::encode( downc['baseurl'] + filex[2] + filex[0] ), 
 		      :http_basic_authentication => [downc['user'], downc['pass']],
 		      :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE ).read
     else
-      file.write open( downc['baseurl'] + filex[2] + filex[0],
+      file.write open( URI::encode( downc['baseurl'] + filex[2] + filex[0] ),
 		      :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE ).read
     end
   end
