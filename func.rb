@@ -21,7 +21,7 @@ def download( filex, downc )
   if filex[2] != ""
     filex[2] += "/"
   end
-  print downc['baseurl'] + filex[2] + filex[0]
+  print downc['baseurl'] + filex[2] + filex[0] + "\n"
   # Open an HTTP connection
   File.open( folderDate( downc['destination'] ) + filex[0], "wb") do |file|
     if downc['user'] != nil
