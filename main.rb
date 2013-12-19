@@ -53,7 +53,7 @@ files.each do |filex|
   folder = folder.join '/'
   
   #second fn is a backup for downloading
-  data = [fn, size, fn]
+  data = [fn, size.to_i, folder]
   if folder.size == 0
     folder = ""
   end
