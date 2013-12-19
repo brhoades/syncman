@@ -89,23 +89,7 @@ while true
     folders[folder].each do |filex|
       #FIXME: This will download twice if at the cusp of a month
       if not File.exist? folderDate( downc['destination'] ) + filex[0]
-	# Create the directory recursively, substituting the date in
-	system "mkdir -p \"" + folderDate( downc['destination'] ) + "\""
-	if filex[2] != ""
-	  filex[2] += "/"
-	end
-	print downc['baseurl'] + filex[2] + filex[0]
-	# Open an HTTP connection
-	File.open( folderDate( downc['destination'] ) + filex[0], "wb") do |file|
-	  if downc['user'] != nil
-	    file.write open( downc['baseurl'] + filex[2] + filex[0], 
-			    :http_basic_authentication => [downc['user'], downc['pass']],
-			    :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE ).read
-	  else
-	    file.write open( downc['baseurl'] + filex[2] + filex[0],
-			    :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE ).read
-	  end
-	end
+	download filex, downc
       end
     end
   end
