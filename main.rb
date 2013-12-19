@@ -4,9 +4,20 @@ require 'net/ssh'
 cfg = YAML.load File.open "config.yml"
 sshc = cfg['ssh']
 downc = cfg['download']
+$filters = cfg['download']['filter'].split ","
 files = ""
 folders = {} #Our folder indicies that point to our files
 delete = [] #Put things to delete in here as we go
+
+def filter( fn )
+  $filters.each do |filter|
+    if fn.match /#{filter}$/
+      return true
+    end
+  end
+  
+  return false
+end
 
 #Contact the server via SSH and get a file readout with ls
 Net::SSH.start( sshc['server'], sshc['username'], :password => [sshc['pass']], :port => sshc['port'] ) do |ssh|
@@ -46,5 +57,21 @@ files.each do |filex|
     folders[folder] = [data]
   end  
 end  
+
+print folders.to_s + "\n\n"
+
+#Remove filtered files
+folders.keys.each do |folder|
+  print folder + "\n"
+  folders[folder].each do |file|
+    if filter file[0]
+      folders[folder].delete file
+    end
+  end
+end
+
+#Now move folders with one file to the main directory
+folders.keys.each do |folder|
+end
 
 print folders
