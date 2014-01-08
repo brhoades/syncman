@@ -8,6 +8,11 @@ sshc = cfg['ssh']
 downc = cfg['download']
 $filters = cfg['download']['filter'].split ","
 
+trap("INT") do
+  print "Killed\n";
+  exit
+end
+
 while true
   files = ""
   folders = {} #Our folder indicies that point to our files
