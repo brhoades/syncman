@@ -23,7 +23,7 @@ def download( filex, downc )
   if filex[2] != ""
     filex[2] += "/"
   end
-  print downc['baseurl'] + filex[2] + filex[0] + "\n"
+  print downc['baseurl'] + filex[2] + filex[0] + " " + "..." + " "
   # Open an HTTP connection
   File.open( folderDate( downc['destination'] ) + filex[0], "wb") do |file|
     if downc['user'] != nil
@@ -35,4 +35,6 @@ def download( filex, downc )
 		      :ssl_verify_mode => OpenSSL::SSL::VERIFY_NONE ).read
     end
   end
+  
+  print "done\n"
 end
