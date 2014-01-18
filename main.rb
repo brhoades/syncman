@@ -18,11 +18,16 @@ while true
   folders = {} #Our folder indicies that point to our files
   delete = [] #Put things to delete in here as we go
 
-  #Contact the server via SSH and get a file readout with ls
-  Net::SSH.start( sshc['server'], sshc['username'], :password => [sshc['pass']], :port => sshc['port'] ) do |ssh|
-    #Name relative to directory\tsize in bytes\tunix timestamp\n
-  files = ssh.exec! "cd " + sshc['directory'] + "&& find -type f -newermt @#{Date.today.to_time.to_i - downc['time']*3600} -printf '%p\t%s\t%Ts\n'"
-  end
+  begin
+    #Contact the server via SSH and get a file readout with ls
+    Net::SSH.start( sshc['server'], sshc['username'], :password => [sshc['pass']], :port => sshc['port'] ) do |ssh|
+      #Name relative to directory\tsize in bytes\tunix timestamp\n
+      files = ssh.exec! "cd " + sshc['directory'] + "&& find -type f -newermt @#{Date.today.to_time.to_i - downc['time']*3600} -printf '%p\t%s\t%Ts\n'"
+    end
+
+  rescue ex
+        
+  end 
 
   if files == nil
     print "No files to download\n"
