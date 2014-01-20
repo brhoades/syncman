@@ -12,6 +12,15 @@ download:
   pass: 
   destination: 
   filter: 
+users:
+  joe:
+    email: joe@gmail.com
+    #0 => when file is available remotely
+    #1 => when file has begun to download locally
+    #2 => when file has locally been completed
+    notify: 0,1,2
+    tags: all
+  
 notify:
   tag:
     regex: Example.File.(Matchme[0-9]+).flac

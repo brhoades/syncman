@@ -10,6 +10,7 @@ downc = cfg['download']
 $notifyc = cfg['notify']
 tagsc = cfg['notify']['tags']
 $filters = cfg['download']['filter'].split ","
+$usersc = cfg['users']
 
 trap("INT") do
   print "Killed\n";

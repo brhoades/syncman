@@ -1,15 +1,34 @@
+AVAILABLE = 0
+STARTED = 1
+COMPLETE = 2
+
 class Notify
   @@filename = nil
   @@tag = "unk"
   @@description = "Unknown file: "
+  
   def initialize( fn )
     @@filename = fn
     @@tag = "unk"
     @@description = @@description + fn
     
-    renderMessage( );
+    renderMessage
   end
-   
+  
+  def available
+    getUsers AVAILABLE
+  end
+  
+  def started
+    getusers STARTED
+  end
+  
+  def complete
+    getUsers COMPLETE
+  end
+  
+  private
+  
   # Get our file's information by looking in config
   #   Looks for matches in the file name according to the regex
   #   spots in parenthesis. Then replaces in details $1-$4.
@@ -41,7 +60,20 @@ class Notify
     end
   end
   
-  private
+  # Wrapper function for easier calling of each type of notification
+  def getUsers( type )
+    $usersc.keys.each do |user|
+      tags = user['tags'].split ','
+      if ( tags.include? "all" or tags.include? tag ) \
+	and user['notify'].split( ',' ).include? type
+	dispatch type, user
+      end
+    end
+  end
+  
+  # Actually send our notifications out
+  def dispatch( type, user )
+  end
   
   def description=( val )
     @@description = val
@@ -49,6 +81,10 @@ class Notify
   
   def description( )
     @@description
+  end
+  
+  def description=( val )
+    @@description = val
   end
   
   def fn( )
@@ -59,6 +95,7 @@ class Notify
     @@filename
   end
   
+  def filename=( val )
+    @@filename = val
+  end
 end
-
-
