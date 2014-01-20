@@ -12,3 +12,14 @@ download:
   pass: 
   destination: 
   filter: 
+notify:
+  tag:
+    regex: Example.File.(Matchme[0-9]+).flac
+    name: Example Files
+    details: Example File $1
+  unk:
+    regex: $[z]^
+    name: Default Notification
+  all:
+    regex: $[z]^
+    name: Users with this tag get all notifications  
