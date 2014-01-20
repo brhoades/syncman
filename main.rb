@@ -102,10 +102,9 @@ while true
     folders[folder].each do |filex|
       #FIXME: This will download twice if at the cusp of a month
       if not File.exist? folderDate( downc['destination'] ) + filex[0]
-	ret, tag = fetchInfo filex[0]
-	#print ret + "\n"
-	#print tag + "\n"
-	#print "\n"
+	note = Notify.new filex[0] 
+	
+	
 	download filex, downc
       end
     end
