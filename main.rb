@@ -2,10 +2,13 @@ require 'yaml'
 require 'net/ssh'
 require 'open-uri'
 require_relative 'func.rb'
+require_relative 'notify.rb'
 
 cfg = YAML.load File.open "config.yml"
 sshc = cfg['ssh']
 downc = cfg['download']
+$notifyc = cfg['notify']
+tagsc = cfg['notify']['tags']
 $filters = cfg['download']['filter'].split ","
 
 trap("INT") do
@@ -99,6 +102,10 @@ while true
     folders[folder].each do |filex|
       #FIXME: This will download twice if at the cusp of a month
       if not File.exist? folderDate( downc['destination'] ) + filex[0]
+	ret, tag = fetchInfo filex[0]
+	#print ret + "\n"
+	#print tag + "\n"
+	#print "\n"
 	download filex, downc
       end
     end
