@@ -26,7 +26,7 @@ while true
     end
 
   rescue ex
-        
+    print "Exception recieved " + ex + "." 
   end 
 
   if files == nil
