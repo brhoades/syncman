@@ -29,8 +29,8 @@ while true
       files = ssh.exec! "cd " + sshc['directory'] + "&& find -type f -newermt @#{Date.today.to_time.to_i - downc['time']*3600} -printf '%p\t%s\t%Ts\n'"
     end
 
-  rescue ex
-    print "Exception recieved " + ex + "." 
+  rescue
+    print "Exception recieved\n"
   end 
 
   if files == nil
