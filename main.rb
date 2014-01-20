@@ -86,7 +86,7 @@ while true
   folders.keys.each do |folder|
     
     if folders[folder].size == 0
-      folders.remove folder
+      folders.delete folder
     elsif folders[folder].size == 1 and folder != ""
       if not folders.has_key? ""
 	folders[""] = []
